@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Photo Gallery</title>
+    <style>
+        .h2 {
+            color: #454242
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .intro {
+            background-color: #c00;
+            /* Red background */
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .intro p {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .gallery {
+            margin-bottom: 20px;
+        }
+
+        .gallery h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .thumbnail {
+            position: relative;
+            cursor: pointer;
+            flex: 1 1 calc(25% - 20px);
+            /* Four thumbnails per row with space */
+            max-width: calc(25% - 20px);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail.selected img {
+            border-color: magenta;
+        }
+
+        .thumbnail .label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .thumbnail .label h3 {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .thumbnail .label .location {
+            font-size: 1rem;
+        }
+
+        .thumbnail .view-more {
+            position: absolute;
+            top: 90%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .thumbnail:hover .view-more {
+            display: block;
+        }
+        .gallery03 .thumbnail {
+            flex: 1 1 calc(50% - 20px);
+            max-width: calc(15% - 20px);
+        }
+        @media (max-width: 600px) {
+            .thumbnail {
+                flex: 1 1 calc(50% - 10px);
+                /* Two thumbnails per row on smaller screens */
+                max-width: calc(50% - 10px);
+            }
+
+            .thumbnail img {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2 class="h2">Intro</h2>
+    <div class="intro">
+        <p>The designs represent both desktop and mobile view</p><br><br><br>
+        <p>To view interactions:Run the designs in prototype mode.</p>
+    </div>
+
+    <div class="gallery" id="gallery01">
+        <h2 class="h2">Gallery 01</h2>
+        <div class="thumbnails">
+            <!-- Thumbnails will be inserted here -->
+        </div>
+    </div>
+
+    <div class="gallery gallery03" id="gallery03">
+        <h2 class="h2">Gallery 03</h2>
+        <div class="thumbnails">
+            <!-- Thumbnails will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const gallery01Images = [
+            { src: 'cat.jpeg', label: 'cats ani', location: 'America' },
+            { src: 'doc.jpg', label: 'doc anim', location: 'South Asia' },
+            { src: 'rat.jpg', label: 'rat anim', location: 'West Africa' },
+            { src: 'cat2.jpg', label: 'cat anim', location: 'north Africa' },
+        ];
+
+        const gallery03Images = [
+        { src: 'cat.jpeg', label: 'cats ani', location: 'America' },
+            { src: 'doc.jpg', label: 'doc anim', location: 'South Asia' },
+            { src: 'rat.jpg', label: 'rat anim', location: 'West Africa' },
+            { src: 'cat2.jpg', label: 'cat anim', location: 'north Africa' },
+        ];
+
+        function createThumbnail(image, galleryClass) {
+            const thumbnail = document.createElement('div');
+            thumbnail.classList.add('thumbnail', galleryClass); // Add gallery-specific class
+            thumbnail.innerHTML = `
+                <img src="${image.src}" alt="${image.label}">
+                ${galleryClass === 'gallery01' ? `<div class="label"> <h3>${image.label} </h3>${image.location}</div>` : ''}
+                <button class="view-more">View More</button>
+            `;
+            thumbnail.addEventListener('click', () => {
+                document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('selected'));
+                thumbnail.classList.add('selected');
+            });
+            return thumbnail;
+        }
+
+        function loadGallery(images, galleryId, galleryClass) {
+            const gallery = document.getElementById(galleryId);
+            const thumbnailsContainer = gallery.querySelector('.thumbnails');
+            images.forEach(image => {
+                const thumbnail = createThumbnail(image, galleryClass); // Pass gallery-specific class
+                thumbnailsContainer.appendChild(thumbnail);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGallery(gallery01Images, 'gallery01', 'gallery01'); // Pass class name 'gallery01'
+            loadGallery(gallery03Images, 'gallery03', 'gallery03'); // Pass class name 'gallery03'
+        });
+    </script>
+</body>
+</html>
